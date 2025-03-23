@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Connect PCEX</title>
+</head>
+<body>
+    <h2>🔐 Connect Your PCEX Account</h2>
+    <form method="POST" action="/submit_login">
+        <input type="hidden" name="tg_id" value="{{ tg_id }}">
+        <input type="hidden" name="token" value="{{ token }}">
+
+        <label>PCEX Username:</label><br>
+        <input type="text" name="username" required><br><br>
+
+        <label>Password:</label><br>
+        <input type="password" name="password" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
