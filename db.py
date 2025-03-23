@@ -40,16 +40,24 @@ def set_trial_start(tg_id):
 def generate_token():
     return str(uuid.uuid4())
 
-def create_or_update_user(telegram_id):
+def create_or_update_user(tg_id):
     conn = sqlite3.connect("users.db")
     c = conn.cursor()
-    token = generate_token()
-    c.execute("""
-        INSERT INTO users (telegram_id, token, is_connected, created_at)
-        VALUES (?, ?, 0, ?)
-        ON CONFLICT(telegram_id) DO UPDATE SET token = excluded.token
-    """, (telegram_id, token, datetime.utcnow().isoformat()))
-    conn.commit()
+
+    # Check if the user already exists
+    c.execute("SELECT token FROM users WHERE telegram_id = ?", (tg_id,))
+    row = c.fetchone()
+
+    if row:
+        token = row[0]  # Reuse the existing token
+    else:
+        token = secrets.token_urlsafe(16)
+        c.execute("""
+            INSERT INTO users (telegram_id, token)
+            VALUES (?, ?)
+        """, (tg_id, token))
+        conn.commit()
+
     conn.close()
     return token
 

@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # --- Constants ---
-WEB_DASHBOARD_URL = "http://127.0.0.1:5000/connect"
+WEB_DASHBOARD_URL = "https://0aa5561a-5ba9-4bbf-9f8b-1970df075db0-00-3d59yaeoy2zae.worf.replit.dev"
 BOT_TOKEN = "7708362431:AAHquLb5XaCecJzGZjnXA1xS_m19-Adwykg"
 ADMIN_TELEGRAM_ID = "8195940821"  # Replace with your actual Telegram user ID
 NOWPAYMENTS_API_KEY = "ZFBBWG4-43847WG-NHV8WKA-XZB06QQ"  # Replace with your real API key
@@ -37,7 +37,7 @@ async def start(update: Update, context: CallbackContext):
     set_trial_start(user_id)
 
     encoded_token = urllib.parse.quote(token)
-    link = f"{WEB_DASHBOARD_URL}?tg_id={user_id}&auth_token={encoded_token}"
+    link = f"{WEB_DASHBOARD_URL}/connect?tg_id={user_id}&auth_token={encoded_token}"
 
     keyboard = [[InlineKeyboardButton("🔗 Connect to Dashboard", url=link)]]
     reply_markup = InlineKeyboardMarkup(keyboard)
