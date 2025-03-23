@@ -1,8 +1,12 @@
 from flask import Flask, request, render_template, redirect, jsonify
 import sqlite3
 from datetime import datetime, timedelta
+from telegram import Bot
+
 
 app = Flask(__name__)
+
+BOT_TOKEN = "7708362431:AAHquLb5XaCecJzGZjnXA1xS_m19-Adwykg"
 
 DB_PATH = "users.db"
 
@@ -43,7 +47,9 @@ def connect():
     token = request.args.get("auth_token")
     print("🔍 Received tg_id:", tg_id)
     print("🔍 Received token:", token)
+    
     user = get_user(tg_id)
+    print("🔍 DB record for user:", user)
 
     if not user or user[1] != token:
         return "❌ Invalid token or session", 403
@@ -67,6 +73,7 @@ def submit_login():
 @app.route("/nowpayments/webhook", methods=["POST"])
 def nowpayments_webhook():
     data = request.json
+    print("🧾 Webhook received:", data)
     payment_status = data.get("payment_status")
     order_id = data.get("order_id")
 
@@ -99,7 +106,21 @@ def nowpayments_webhook():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+    # ✅ Send Telegram notification
+    try:
+        BOT_TOKEN = "7708362431:AAHquLb5XaCecJzGZjnXA1xS_m19-Adwykg"
+        bot = Bot(token=BOT_TOKEN)
+        bot.send_message(
+            chat_id=int(tg_id),
+            text=f"🎉 Payment confirmed! Your *{plan}* subscription is now active.",
+            parse_mode="Markdown"
+        )
+        print(f"📤 Notification sent to Telegram user {tg_id}")
+    except Exception as e:
+        print(f"❌ Failed to send Telegram message: {e}")
+
     return jsonify({"status": "updated"}), 200
 
 if __name__ == "__main__":
-    app.run(debug=True)
+ 
+    app.run(host="0.0.0.0", port=3000)
