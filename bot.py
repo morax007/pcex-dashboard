@@ -122,7 +122,7 @@ async def handle_subscription_choice(update: Update, context: CallbackContext):
         "pay_currency": "usdtbsc",
         "order_id": f"{user_id}_{choice}_{datetime.utcnow().timestamp()}",
         "order_description": f"Telegram user {user_id} chose {choice} plan",
-        "ipn_callback_url": "https://yourdomain.com/nowpayments/webhook",
+        "ipn_callback_url": "https://0aa5561a-5ba9-4bbf-9f8b-1970df075db0-00-3d59yaeoy2zae.worf.replit.dev/nowpayments/webhook",
         "success_url": "https://t.me/YourBotUsername",
         "cancel_url": "https://t.me/YourBotUsername"
     }
